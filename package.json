@@ -1,0 +1,20 @@
+{
+  "name": "serverless-keyvalue",
+  "version": "0.0.1",
+  "description": "A generic key-value store in using the Serverless framework.",
+  "author": {
+    "name": "Woodland Hunter"
+  },
+  "license": "MIT",
+  "private": false,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/woodlandh/serverless-keyvalue.git"
+  },
+  "dependencies": {},
+  "bugs": {
+    "url": "https://github.com/woodlandh/serverless-keyvalue/issues"
+  },
+  "homepage": "https://github.com/woodlandh/serverless-keyvalue#readme",
+  "scripts": {}
+}

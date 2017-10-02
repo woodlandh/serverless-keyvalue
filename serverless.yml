@@ -1,0 +1,84 @@
+service: keyvalue
+frameworkVersion: ">=1.1.0 <2.0.0"
+
+provider:
+  name: aws
+  runtime: python2.7
+
+  stage: v001
+  region: us-west-2
+  stackTags:
+    project: serverless-keyvalue
+
+  environment:
+    DYNAMODB_TABLE: ${self:service}-${opt:stage, self:provider.stage}
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+      Resource: "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.DYNAMODB_TABLE}"
+
+functions:
+  create:
+    handler: src/create.create
+    events:
+      - http:
+          path: keys
+          method: post
+          cors: true
+
+  list:
+    handler: src/list.list
+    events:
+      - http:
+          path: keys
+          method: get
+          cors: true
+
+  get:
+    handler: src/get.get
+    events:
+      - http:
+          path: key/{keyname}
+          method: get
+          cors: true
+
+  update:
+    handler: src/update.update
+    events:
+      - http:
+          path: key/{keyname}
+          method: put
+          cors: true
+
+  delete:
+    handler: src/delete.delete
+    events:
+      - http:
+          path: key/{keyname}
+          method: delete
+          cors: true
+
+resources:
+  Resources:
+    TodosDynamoDbTable:
+      Type: 'AWS::DynamoDB::Table'
+      Properties:
+        AttributeDefinitions:
+          -
+            AttributeName: keyname
+            AttributeType: S
+        KeySchema:
+          -
+            AttributeName: keyname
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        TableName: ${self:provider.environment.DYNAMODB_TABLE}
+

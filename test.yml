@@ -1,0 +1,84 @@
+---
+- config:
+    - testset: "pyresttest tests for basic CRUD"
+
+- test:
+    - group: "default"
+    - name: "create new key 'pyresttest' with value 'success'"
+    - url: "/v001/keys"
+    - method: "POST"
+    - body: '{"keyname": "pyresttest", "text": "success"}'
+    - headers: {'Content-Type': 'application/json'}
+    - validators:
+        - compare: { raw_body: "", comparator: contains, expected: 'pyresttest' }
+
+- test:
+    - group: "default"
+    - name: "fetch keyval 'pyresttest'"
+    - url: "/v001/key/pyresttest"
+    - method: "GET"
+    - headers: {'Content-Type': 'application/json'}
+    - validators:
+        - compare: { raw_body: "", comparator: contains, expected: 'success' }
+
+- test:
+    - group: "default"
+    - name: "list all keyvals"
+    - url: "/v001/keys"
+    - method: "GET"
+    - headers: {'Content-Type': 'application/json'}
+    - validators:
+        - compare: { raw_body: "", comparator: contains, expected: 'pyresttest' }
+
+- test:
+    - group: "default"
+    - name: "update value of key 'pyresttest' to 'second success'"
+    - url: "/v001/key/pyresttest"
+    - method: "PUT"
+    - body: '{"text": "second success"}'
+    - headers: {'Content-Type': 'application/json'}
+    - validators:
+        - compare: { raw_body: "", comparator: contains, expected: 'second success' }
+
+- test:
+    - group: "default"
+    - name: "fetch value from key 'pyresttest'"
+    - url: "/v001/key/pyresttest"
+    - method: "GET"
+    - headers: {'Content-Type': 'application/json'}
+    - validators:
+        - compare: { raw_body: "", comparator: contains, expected: 'second success' }
+
+- test:
+    - group: "default"
+    - name: "delete key 'pyresttest'"
+    - url: "/v001/key/pyresttest"
+    - method: "DELETE"
+    - headers: {'Content-Type': 'application/json'}
+
+  # non-idempotent test, if non-pyresttest items are in the database the this is bad
+  #- test:
+  #    - group: "default"
+  #    - name: "fetch keys, there are none"
+  #    - url: "/v001/keys"
+  #    - method: "GET"
+  #    - headers: {'Content-Type': 'application/json'}
+  #    - validators:
+  #      - compare: { raw_body: "", comparator: equals, expected: '[]' }
+
+- test:
+    - group: "default"
+    - name: "expected 404 to delete nonexistent key"
+    - url: "/v001/key/fakepyresttest1923091823"
+    - method: "DELETE"
+    - headers: {'Content-Type': 'application/json'}
+    - expected_status: [404]
+
+- test:
+    - group: "default"
+    - name: "expected 404 to fetch deleted key 'pyresttest'"
+    - url: "/v001/key/pyresttest"
+    - method: "GET"
+    - headers: {'Content-Type': 'application/json'}
+    - expected_status: [404]
+
