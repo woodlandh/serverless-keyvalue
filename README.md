@@ -1,4 +1,4 @@
-#serverless-blink1
+# serverless-blink1
 
 [![serverless](http://public.serverless.com/badges/v3.svg)](http://www.serverless.com)
 
@@ -12,7 +12,7 @@ This project uses:
 * [pyresttest](https://github.com/svanoort/pyresttest) for testing
 
 
-##Install
+## Install
 
 Make sure you have the [Serverless Framework](http://www.serverless.com) installed and you're using Node.js v4.0+. 
 ```
@@ -64,7 +64,7 @@ Copy your base URL to your clipboard, you'll need it. Exclude the trailing forwa
 https://XXXXXXXXXX.execute-api.us-west-2.amazonaws.com
 ```
 
-##Usage
+## Usage
 
 You can interact with the API using curl. I've created `run_example.sh` with simple CRUD operations. Use it like so:
 ```
